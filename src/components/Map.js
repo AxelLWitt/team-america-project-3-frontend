@@ -1,10 +1,14 @@
 import React, { useState } from 'react';
-import {Link} from 'react-router-dom';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 import ShowModal from './Modal'
+import Nav from './Nav'
+import useGoogleAuth from './useGoogleAuth'
 
 const MapContainer = () => {
   let API_KEY = process.env.REACT_APP_GOOGLE_MAPS_API_KEY;
+  const {user, profile} = useGoogleAuth()
+
+  console.log(user, profile)
 
   const mapContainerStyles = {
     height: "100vh",
@@ -39,14 +43,16 @@ const MapContainer = () => {
         zoom={14}
         center={center}
         onDblClick={handleMapClick}
-        options={{ mapId : "af6bc521083dc9cf",
-                   disableDoubleClickZoom:true }}
+        options={{
+          mapId: "af6bc521083dc9cf",
+          disableDoubleClickZoom: true,
+        }}
       >
+        <Nav/>
         {markers.map((marker, index) => (
-          <Marker key={index} position={marker}
-          onClick={handleShowEvent}/>
+          <Marker key={index} position={marker} onClick={handleShowEvent} />
         ))}
-      <ShowModal show={showModal}/>
+        <ShowModal show={showModal}/>
       </GoogleMap>
     </LoadScript>
   );
